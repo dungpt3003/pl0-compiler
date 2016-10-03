@@ -19,6 +19,7 @@ char current_character;
 TokenType current_token;
 int number_ident;
 char ident[MAX_IDENT_LEN + 1];
+char ident_value[MAX_IDENT_LEN + 1];
 bool is_keyword;
 int i, j, k;
 

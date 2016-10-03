@@ -24,14 +24,12 @@ char getChar(){
 void printToken(){
 	if (current_token == IDENT){
 		is_keyword = false;
-        i = 0;
-        while (word[i] != NULL){
+        for (i = 0; i < 15; i++){
         	if(strcmp(ident, word[i]) == 0){
         		fprintf(outfile, "%s\n", word[i]);
 				is_keyword = true;
 				break;
 			}
-            i++;
 		}
 		if (is_keyword == false){
 			fprintf(outfile, "IDENT(%s)\n", ident);
@@ -40,12 +38,10 @@ void printToken(){
 	else if (current_token == NUMBER)
 		fprintf(outfile, "NUMBER(%d)\n", number_ident);
 	else {
-        k = 0;
-		while(all_token[k] != NULL)){
+        for (k = 0; k < 21; k++){
 			if (current_token == all_token[k])
 				fprintf(outfile, "%s\n", token_word[k]);
-            k++;
-		}
+    	}
 	}
 
 }
@@ -111,6 +107,68 @@ void getSingleToken(){
 	}
 }
 
+// Lexeme analyzer
+void getToken(){
+	// Remove empty character
+	while (current_character == ' ') getChar();
+
+	// Receive IDENT
+	if (is_letter(current_character)){
+		current_token = IDENT;
+        k = 0;
+        do  {
+            if (k < MAX_IDENT_LEN)
+                ident_value[k++] = current_character;
+            getChar();
+        }
+        while (is_letter(current_character) || is_digit(current_character));
+        ident_value[k] = '\0';
+        strcpy(ident, ident_value);
+	}
+
+	// Receive NUMBER
+	else if(is_digit(current_character)){
+		current_token = NUMBER;
+		number_ident = 0;
+		do{
+			number_ident = number_ident * 10 + current_character - '0';
+			getChar();
+		} while(is_digit(current_character));
+
+	}
+
+	// Receive complex lexemes
+
+	else if (current_character == '>'){
+		getChar();
+		if (current_character == '=')
+			current_token = GEQ;
+		else
+			current_token = GTR;
+		getChar();
+	}
+	else if (current_character == '<'){
+		getChar();
+		if (current_character == '=')
+			current_token = LEQ;
+		else if (current_character == '>')
+			current_token = NEQ;
+		else
+			current_token = LSS;
+		getChar();
+	}
+	else if (current_character == ':'){
+		getChar();
+		if (current_character == '=')
+			current_token = ASSIGN;
+		else
+			current_token = NONE;
+		getChar();
+	}
+	else getSingleToken();
+
+	printToken();
+}
 
 void show_usage(char* program_name){
     printf("Usage: %s", program_name);
@@ -134,8 +192,7 @@ int main(int argc, char** argv){
     }
     current_character = ' ';
     while (!feof(infile)){
-        getChar();
-        fprintf(outfile, "%c", current_character);
+        getToken();
     }
     return 0;
 }
