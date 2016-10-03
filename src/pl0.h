@@ -18,16 +18,18 @@ FILE* infile, *outfile;
 char current_character;
 TokenType current_token;
 int number_ident;
-char Ident[MAX_IDENT_LEN + 1];
+char ident[MAX_IDENT_LEN + 1];
+bool is_keyword;
+int i, j, k;
 
 // Keyword
 TokenType keyword[] = {BEGIN, CALL, CONST, DO, ELSE, END, FOR, IF, ODD, PROCEDURE, PROGRAM, THEN, TO, VAR, WHILE};
 string word[] = {"BEGIN", "CALL", "CONST", "DO", "ELSE", "END", "FOR", "IF", "ODD", "PROCEDURE", "PROGRAM", "THEN", "TO", "VAR", "WHILE"};
 
 // Token
-TokenType alltoken[] = {IDENT, NUMBER, PLUS, MINUS, TIMES, SLASH, EQU, NEQ, LSS, LEQ, GTR, GEQ, LPARENT,
+TokenType all_token[] = {IDENT, NUMBER, PLUS, MINUS, TIMES, SLASH, EQU, NEQ, LSS, LEQ, GTR, GEQ, LPARENT,
 						RPARENT, LBRACK, RBRACK, PERIOD, COMMA, SEMICOLON, ASSIGN, PERCENT};
-string tokenword[] = {"IDENT", "NUMBER", "PLUS", "MINUS", "TIMES", "SLASH", "EQU", "NEQ", "LSS", "LEQ", "GTR", "GEQ", "LPARENT",
+string token_word[] = {"IDENT", "NUMBER", "PLUS", "MINUS", "TIMES", "SLASH", "EQU", "NEQ", "LSS", "LEQ", "GTR", "GEQ", "LPARENT",
 						"RPARENT", "LBRACK", "RBRACK", "PERIOD", "COMMA", "SEMICOLON", "ASSIGN", "PERCENT"};
 
 #endif
