@@ -15,9 +15,14 @@ int is_digit(char c){
     return 0;
 }
 
+
+char getChar(){
+    current_character = fgetc(infile);
+}
+
 // Print tokens and lexemes
 void printToken(){
-	if (Token == IDENT){
+	if (current_token == IDENT){
 		is_keyword = false;
         i = 0;
         while (word[i] != NULL){
@@ -45,9 +50,67 @@ void printToken(){
 
 }
 
-char getCh(){
-    current_character = fgetc(infile);
+//Receive one-character token
+void getSingleToken(){
+	switch(current_character){
+		case '+':
+			current_token = PLUS;
+			getChar();
+			break;
+		case '-':
+			current_token = MINUS;
+			getChar();
+			break;
+		case '*':
+			current_token = TIMES;
+			getChar();
+			break;
+		case '/':
+			current_token = SLASH;
+			getChar();
+			break;
+		case '%':
+			current_token = PERCENT;
+			getChar();
+			break;
+		case '(':
+			current_token = LPARENT;
+			getChar();
+			break;
+		case ')':
+			current_token = RPARENT;
+			getChar();
+			break;
+		case '[':
+			current_token = LBRACK;
+			getChar();
+			break;
+		case ']':
+			current_token = RBRACK;
+			getChar();
+			break;
+		case '.':
+			current_token = PERIOD;
+			getChar();
+			break;
+		case ',':
+			current_token = COMMA;
+			getChar();
+			break;
+		case ';':
+			current_token = SEMICOLON;
+			getChar();
+			break;
+		case '=':
+			current_token = EQU;
+			getChar();
+			break;
+		default:
+			current_token = NONE;
+			getChar();
+	}
 }
+
 
 void show_usage(char* program_name){
     printf("Usage: %s", program_name);
@@ -71,7 +134,7 @@ int main(int argc, char** argv){
     }
     current_character = ' ';
     while (!feof(infile)){
-        getCh();
+        getChar();
         fprintf(outfile, "%c", current_character);
     }
     return 0;
