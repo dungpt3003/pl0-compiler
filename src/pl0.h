@@ -14,7 +14,7 @@ typedef enum {
 
 typedef char string[MAX_IDENT_LEN + 1];
 
-FILE* infile, outfile;
+FILE* infile, *outfile;
 char current_character;
 TokenType current_token;
 int number_ident;
