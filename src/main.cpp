@@ -194,5 +194,7 @@ int main(int argc, char** argv){
     while (!feof(infile)){
         getToken();
     }
+    fclose(infile);
+    fclose(outfile);
     return 0;
 }
