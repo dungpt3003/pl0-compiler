@@ -173,7 +173,7 @@ void getToken(){
 void show_usage(char* program_name){
     printf("Usage: %s", program_name);
     printf(" input_file output_file\n");
-    printf("Note: input_file is compulsory, output_file is optional (default: result.txt)\n");
+    printf("Note: These parameters are compulsory, you can use either absolute or relative path\n");
 }
 
 int main(int argc, char** argv){
