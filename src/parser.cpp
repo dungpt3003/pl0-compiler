@@ -255,6 +255,22 @@ void variable(){
         parseError(14);
 
 }
+
+void proVariable(){
+    while (token != RPARENT){
+        if (token == VAR)
+            nextToken();
+        if (token == IDENT){
+            nextToken();
+            while (token == SEMICOLON){
+                nextToken();
+                proVariable();
+            }
+        }
+        else parseError(14);
+    }
+}
+
 void block(){
     // Branch 1: Declare constants
     while (token == CONST){
@@ -266,6 +282,34 @@ void block(){
     while (token == VAR){
         nextToken();
         variable();
+    }
+
+    // Branch 3: Procedure
+    while (token == PROCEDURE){
+        nextToken();
+        if (token == IDENT){
+            nextToken();
+            if (token == LPARENT){
+                nextToken();
+                proVariable();
+                if (token == RPARENT)
+                    nextToken();
+                else
+                    parseError(7);
+            }
+
+            if (token == SEMICOLON){
+                block();
+                if (token == SEMICOLON)
+                    nextToken();
+                else
+                    parseError(3);
+            }
+            else
+                parseError(3);
+        }
+        else
+            parseError(10);
     }
 
 }
