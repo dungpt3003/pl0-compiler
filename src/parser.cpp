@@ -15,8 +15,9 @@ static char *syntaxerrors[] =
     [6] = "Missing bracket",
     [7] = "Missing parenthesis",
     [8] = "Syntax error in condition",
-    [9] = "Missing token ASSIGN",
-    [10] = "Missing fuction/procedure name"
+    [9] = "Missing ASSIGN (:=) ",
+    [10] = "Missing fuction/procedure name",
+    [11] = "Missing keyword END"
 };
 
 void nextToken(){
@@ -81,6 +82,7 @@ void condition(){
 }
 
 void statement(){
+    // Branch 1: assign variables
     if (token == IDENT){
         nextToken();
         // For array variable
@@ -98,6 +100,7 @@ void statement(){
         } else
             parseError(9);
     }
+    // Branch 2: Call procedure
     else if (token == CALL){
         nextToken();
         if (token == IDENT){
@@ -114,6 +117,19 @@ void statement(){
                     parseError(7);
             }
         } else parseError(10);
+    }
+    // Branch 3: Begin - end block
+    else if (token == BEGIN){
+        nextToken();
+        statement();
+        while (token == SEMICOLON){
+            nextToken();
+            statement();
+        }
+        if (token == END)
+            nextToken();
+        else
+            parseError(11);
     }
 }
 

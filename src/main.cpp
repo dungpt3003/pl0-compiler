@@ -228,17 +228,6 @@ int main(int argc, char** argv){
     while (!feof(infile)){
         getToken();
     }
-    // for (i = 0; i < token_count; i++){
-    //   for (k = 0; k < 21; k++)
-    //     if (tokenList[i] == all_token[k]){
-    //       fprintf(outfile, "%s\n", token_word[k]);
-    //     }
-    //     for (k = 0; k < 15; k++)
-    //       if (tokenList[i] == keyword[k]){
-    //         fprintf(outfile, "%s\n", word[k]);
-    //       }
-    //
-    // }
     program();
     fclose(infile);
     fclose(outfile);
