@@ -267,18 +267,20 @@ void variable(){
                     nextToken();
                 else
                     parseError(6);
-                while (token == COMMA){
+                if (token == SEMICOLON){
                     nextToken();
-                    variable();
+                    block();
                 }
-
-                if (token == SEMICOLON)
-                    nextToken();
                 else
                     parseError(3);
             }
             else
                 parseError(18);
+        }
+        
+        while (token == COMMA){
+            nextToken();
+            variable();
         }
     }
     else
