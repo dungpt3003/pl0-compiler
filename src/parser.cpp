@@ -5,34 +5,55 @@ int parse_count = 0;
 TokenType token;
 
 void expression(void);
+void block(void);
 static char *syntaxerrors[] =
 {
-    [1] = "Missing comma",
-    [2] = "Missing period",
-    [3] = "Missing semicolon",
-    [4] = "Missing program name",
-    [5] = "Missing keyword PROGRAM",
-    [6] = "Missing bracket",
-    [7] = "Missing parenthesis",
-    [8] = "Syntax error in condition",
-    [9] = "Missing ASSIGN (:=) ",
-    [10] = "Missing fuction/procedure name",
-    [11] = "Missing keyword END",
-    [12] = "Missing keyword THEN",
-    [13] = "Missing keyword DO",
-    [14] = "Missing variable name",
-    [15] = "Missing keyword TO",
-    [16] = "Missing EQU (=)",
-    [17] = "Invalid constant declaration: Constant must be a number",
-    [18] = "Missing number of element of array"
+    [1] = "Missing comma\n",
+    [2] = "Missing period\n",
+    [3] = "Missing semicolon\n",
+    [4] = "Missing program name\n",
+    [5] = "Missing keyword PROGRAM\n",
+    [6] = "Missing bracket\n",
+    [7] = "Missing parenthesis\n",
+    [8] = "Syntax error in condition\n",
+    [9] = "Missing ASSIGN (:=)\n",
+    [10] = "Missing fuction/procedure name\n",
+    [11] = "Missing keyword END\n",
+    [12] = "Missing keyword THEN\n",
+    [13] = "Missing keyword DO\n",
+    [14] = "Missing variable name\n",
+    [15] = "Missing keyword TO\n",
+    [16] = "Missing EQU (=)\n",
+    [17] = "Invalid constant declaration: Constant must be a number\n",
+    [18] = "Missing number of element of array\n"
 };
+
+void printOneToken(TokenType print_token){
+    bool is_true = false;
+    for (k = 0; k < 21; k++)
+        if (print_token == all_token[k]){
+            printf("%d %s\n", parse_count, token_word[k]);
+            is_true = true;
+        }
+    for (k = 0; k < 15; k++)
+         if (print_token == keyword[k]){
+             printf(" %d %s\n", parse_count, word[k]);
+             is_true = true;
+         }
+    if (!is_true)
+        printf("Can't find the token\n");
+}
 
 void nextToken(){
     token = tokenList[parse_count++];
+    printOneToken(token);
 }
+
 
 void parseError(int err_num){
     fprintf(outfile, syntaxerrors[err_num]);
+    // Exit on first error
+    exit(0);
 }
 
 void factor(){
@@ -79,13 +100,19 @@ void expression(){
 
 
 void condition(){
-    expression();
-    if (token == EQU || token == NEQ || token == LSS || token == LEQ || token == GTR || token == GEQ){
+    if (token == ODD){
         nextToken();
         expression();
     }
-    else
-        parseError(8);
+    else{
+        expression();
+        if (token == EQU || token == NEQ || token == LSS || token == LEQ || token == GTR || token == GEQ){
+            nextToken();
+            expression();
+        }
+        else
+            parseError(8);
+    }
 }
 
 void statement(){
@@ -123,6 +150,7 @@ void statement(){
                 else
                     parseError(7);
             }
+            else nextToken();
         } else parseError(10);
     }
     // Branch 3: Begin - end block
@@ -210,8 +238,10 @@ void constant(){
                     nextToken();
                     constant();
                 }
-                if (token == SEMICOLON)
+                if (token == SEMICOLON){
                     nextToken();
+                    block();
+                }
                 else
                     parseError(3);
             }
