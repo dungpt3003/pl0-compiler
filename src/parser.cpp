@@ -4,7 +4,7 @@
 int parse_count = 0;
 TokenType token;
 
-void expression();
+void expression(void);
 static char *syntaxerrors[] =
 {
     [1] = "Missing comma",
@@ -19,7 +19,9 @@ static char *syntaxerrors[] =
     [10] = "Missing fuction/procedure name",
     [11] = "Missing keyword END",
     [12] = "Missing keyword THEN",
-    [13] = "Missing keyword DO"
+    [13] = "Missing keyword DO",
+    [14] = "Missing variable name",
+    [15] = "Missing keyword TO"
 };
 
 void nextToken(){
@@ -160,6 +162,36 @@ void statement(){
         }
         else
             parseError(13);
+    }
+
+    // Branch 6: for loop
+    else if (token == FOR){
+        nextToken();
+        if (token == IDENT){
+            nextToken();
+            if (token == ASSIGN){
+                nextToken();
+                expression();
+            }
+            else
+                parseError(9);
+
+            if (token == TO){
+                nextToken();
+                expression();
+            }
+            else
+                parseError(15);
+
+            if (token == DO){
+                nextToken();
+                statement();
+            }
+            else
+                parseError(13);
+        }
+        else
+            parseError(14);
     }
 }
 
