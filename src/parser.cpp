@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "parser.h"
 int parse_count = 0;
 TokenType token;
 
+void expression();
 static char *syntaxerrors[] =
 {
     [1] = "Missing comma",
