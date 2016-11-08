@@ -23,7 +23,8 @@ static char *syntaxerrors[] =
     [14] = "Missing variable name",
     [15] = "Missing keyword TO",
     [16] = "Missing EQU (=)",
-    [17] = "Invalid constant declaration: Constant must be a number"
+    [17] = "Invalid constant declaration: Constant must be a number",
+    [18] = "Missing number of element of array"
 };
 
 void nextToken(){
@@ -223,12 +224,50 @@ void constant(){
     else
         parseError(14);
 }
+
+void variable(){
+    if (token == IDENT){
+        nextToken();
+        // For array variable
+        if (token == LBRACK){
+            nextToken();
+            if (token == NUMBER){
+                nextToken();
+                if (token == RBRACK)
+                    nextToken();
+                else
+                    parseError(6);
+                while (token == COMMA){
+                    nextToken();
+                    variable();
+                }
+
+                if (token == SEMICOLON)
+                    nextToken();
+                else
+                    parseError(3);
+            }
+            else
+                parseError(18);
+        }
+    }
+    else
+        parseError(14);
+
+}
 void block(){
     // Branch 1: Declare constants
     while (token == CONST){
         nextToken();
         constant();
     }
+
+    // Branch 2: Declare variables
+    while (token == VAR){
+        nextToken();
+        variable();
+    }
+
 }
 
 void program(){
