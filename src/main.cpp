@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "pl0.h"
+#include "parser.cpp"
 
 int is_letter(char c){
     if((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))
@@ -238,6 +239,7 @@ int main(int argc, char** argv){
     //       }
     //
     // }
+    program();
     fclose(infile);
     fclose(outfile);
     return 0;
