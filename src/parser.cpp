@@ -312,6 +312,19 @@ void block(){
             parseError(10);
     }
 
+    // Branch 4: Begin - end
+    if (token == BEGIN){
+        nextToken();
+        statement();
+        while (token == SEMICOLON){
+            nextToken();
+            statement();
+        }
+        if (token == END)
+            nextToken();
+        else
+            parseError(11);
+    }
 }
 
 void program(){
