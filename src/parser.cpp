@@ -18,7 +18,8 @@ static char *syntaxerrors[] =
     [9] = "Missing ASSIGN (:=) ",
     [10] = "Missing fuction/procedure name",
     [11] = "Missing keyword END",
-    [12] = "Missing keyword THEN"
+    [12] = "Missing keyword THEN",
+    [13] = "Missing keyword DO"
 };
 
 void nextToken(){
@@ -147,6 +148,18 @@ void statement(){
         }
         else
             parseError(12);
+    }
+
+    // Branch 5: while loop
+    else if (token == WHILE){
+        nextToken();
+        condition();
+        if (token == DO){
+            nextToken();
+            statement();
+        }
+        else
+            parseError(13);
     }
 }
 
