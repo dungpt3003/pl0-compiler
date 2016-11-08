@@ -15,7 +15,8 @@ static char *syntaxerrors[] =
     [6] = "Missing bracket",
     [7] = "Missing parenthesis",
     [8] = "Syntax error in condition",
-    [9] = "Missing token ASSIGN"
+    [9] = "Missing token ASSIGN",
+    [10] = "Missing fuction/procedure name"
 };
 
 void nextToken(){
@@ -37,7 +38,7 @@ void factor(){
             if (token == RBRACK)
                 nextToken();
             else
-                parserError(6);
+                parseError(6);
         }
     }
     else if (token == LPARENT){
@@ -46,7 +47,7 @@ void factor(){
         if (token == RPARENT)
             nextToken();
         else
-            parserError(7);
+            parseError(7);
     }
 }
 
@@ -65,6 +66,54 @@ void expression(){
     if (token == PLUS || token == MINUS){
         nextToken();
         term();
+    }
+}
+
+
+void condition(){
+    expression();
+    if (token == EQU || token == NEQ || token == LSS || token == LEQ || token == GTR || token == GEQ){
+        nextToken();
+        expression();
+    }
+    else
+        parseError(8);
+}
+
+void statement(){
+    if (token == IDENT){
+        nextToken();
+        // For array variable
+        if (token == LBRACK){
+            nextToken();
+            expression();
+            if (token == RBRACK)
+                nextToken();
+            else
+                parseError(6);
+        }
+        if (token == ASSIGN){
+            nextToken();
+            expression();
+        } else
+            parseError(9);
+    }
+    else if (token == CALL){
+        nextToken();
+        if (token == IDENT){
+            if (token == LPARENT){
+                nextToken();
+                expression();
+                while (token == COMMA){
+                    nextToken();
+                    expression();
+                }
+                if (token == RPARENT)
+                    nextToken();
+                else
+                    parseError(7);
+            }
+        } else parseError(10);
     }
 }
 
