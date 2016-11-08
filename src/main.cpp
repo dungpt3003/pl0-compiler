@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <strings.h>
 #include <stdlib.h>
 #include "pl0.h"
 #include "parser.cpp"
@@ -26,7 +27,7 @@ void printToken(){
     if (current_token == IDENT){
     	is_keyword = false;
         for (i = 0; i < 15; i++){
-        	if(strcmp(ident, word[i]) == 0){
+        	if(strcasecmp(ident, word[i]) == 0){
         		fprintf(outfile, "%s\n", word[i]);
     			is_keyword = true;
     			break;
@@ -63,7 +64,7 @@ void pushToken(){
       if (current_token == IDENT){
         is_keyword = false;
           for (i = 0; i < 15; i++){
-            if(strcmp(ident, word[i]) == 0){
+            if(strcasecmp(ident, word[i]) == 0){
                 tokenList[token_count++] = keyword[i];
             is_keyword = true;
             break;

@@ -46,7 +46,7 @@ void printOneToken(TokenType print_token){
 
 void nextToken(){
     token = tokenList[parse_count++];
-    printOneToken(token);
+    //printOneToken(token);
 }
 
 
@@ -277,7 +277,7 @@ void variable(){
             else
                 parseError(18);
         }
-        
+
         while (token == COMMA){
             nextToken();
             variable();
@@ -331,6 +331,7 @@ void block(){
             }
 
             if (token == SEMICOLON){
+                nextToken();
                 block();
                 if (token == SEMICOLON)
                     nextToken();
