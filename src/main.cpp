@@ -46,10 +46,30 @@ void printToken(){
 
 }
 
+// Push token to tokenList
+void pushToken(){
+  if (current_token == IDENT){
+    is_keyword = false;
+      for (i = 0; i < 15; i++){
+        if(strcmp(ident, word[i]) == 0){
+            tokenList[token_count++] = keyword[i];
+        is_keyword = true;
+        break;
+      }
+    }
+    if (is_keyword == false){
+      tokenList[token_count++] = IDENT;
+    }
+  }
+  else {
+      tokenList[token_count++] = current_token;
+  }
+}
+
 // Print lexical analyser error
 void lexerror(char *err, ...){
   fprintf(outfile,"%s\n", err);
-  exit(0);
+  is_lex_error = true;
 }
 
 //Receive one-character token
@@ -179,7 +199,8 @@ void getToken(){
     }
     else getSingleToken();
 
-    printToken();
+    //printToken();
+    pushToken();
 }
 
 void show_usage(char* program_name){
@@ -206,6 +227,17 @@ int main(int argc, char** argv){
     while (!feof(infile)){
         getToken();
     }
+    // for (i = 0; i < token_count; i++){
+    //   for (k = 0; k < 21; k++)
+    //     if (tokenList[i] == all_token[k]){
+    //       fprintf(outfile, "%s\n", token_word[k]);
+    //     }
+    //     for (k = 0; k < 15; k++)
+    //       if (tokenList[i] == keyword[k]){
+    //         fprintf(outfile, "%s\n", word[k]);
+    //       }
+    //
+    // }
     fclose(infile);
     fclose(outfile);
     return 0;

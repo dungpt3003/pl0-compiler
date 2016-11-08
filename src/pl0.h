@@ -4,6 +4,7 @@
 #ifndef PLO_H_
 #define PL0_H_
 #define MAX_IDENT_LEN 10
+#define MAX_PROGRAM_TOKEN 10000
 
 typedef enum {
 	NONE = 0, IDENT, NUMBER, BEGIN, CALL, CONST, DO, ELSE, END, FOR, IF, ODD,
@@ -17,10 +18,13 @@ typedef char string[MAX_IDENT_LEN + 1];
 FILE* infile, *outfile;
 char current_character;
 TokenType current_token;
+TokenType tokenList[MAX_PROGRAM_TOKEN];
 int number_ident;
 char ident[MAX_IDENT_LEN + 1];
 char ident_value[MAX_IDENT_LEN + 1];
 bool is_keyword;
+bool is_lex_error = false;
+int token_count = 0;
 int i, j, k;
 
 // Keyword
