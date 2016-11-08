@@ -21,7 +21,9 @@ static char *syntaxerrors[] =
     [12] = "Missing keyword THEN",
     [13] = "Missing keyword DO",
     [14] = "Missing variable name",
-    [15] = "Missing keyword TO"
+    [15] = "Missing keyword TO",
+    [16] = "Missing EQU (=)",
+    [17] = "Invalid constant declaration: Constant must be a number"
 };
 
 void nextToken(){
@@ -192,6 +194,40 @@ void statement(){
         }
         else
             parseError(14);
+    }
+}
+
+
+void constant(){
+    if (token == IDENT){
+        nextToken();
+        if (token == EQU){
+            nextToken();
+            if (token == NUMBER){
+                nextToken();
+                while (token == COMMA){
+                    nextToken();
+                    constant();
+                }
+                if (token == SEMICOLON)
+                    nextToken();
+                else
+                    parseError(3);
+            }
+            else
+                parseError(17);
+        }
+        else
+            parseError(16);
+    }
+    else
+        parseError(14);
+}
+void block(){
+    // Branch 1: Declare constants
+    while (token == CONST){
+        nextToken();
+        constant();
     }
 }
 
