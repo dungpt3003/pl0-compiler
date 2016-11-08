@@ -46,6 +46,12 @@ void printToken(){
 
 }
 
+// Print lexical analyser error
+void lexerror(char *err, ...){
+  fprintf(outfile,"%s\n", err);
+  exit(0);
+}
+
 //Receive one-character token
 void getSingleToken(){
 	switch(current_character){
@@ -119,6 +125,8 @@ void getToken(){
         do  {
             if (k < MAX_IDENT_LEN)
                 ident_value[k++] = current_character;
+            else
+                lexerror("Too long ident, max ident length is 10");
             getChar();
         }
         while (is_letter(current_character) || is_digit(current_character));
@@ -130,8 +138,12 @@ void getToken(){
     else if(is_digit(current_character)){
     	current_token = NUMBER;
     	number_ident = 0;
+      k = 0;
     	do{
-    		number_ident = number_ident * 10 + current_character - '0';
+        if (k++ < MAX_IDENT_LEN)
+            number_ident = number_ident * 10 + current_character - '0';
+        else
+            lexerror("The number is too big, max number length is 10");
     		getChar();
     	} while(is_digit(current_character));
 
