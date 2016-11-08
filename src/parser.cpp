@@ -11,7 +11,11 @@ static char *syntaxerrors[] =
     [2] = "Missing period",
     [3] = "Missing semicolon",
     [4] = "Missing program name",
-    [5] = "Missing keyword PROGRAM"
+    [5] = "Missing keyword PROGRAM",
+    [6] = "Missing bracket",
+    [7] = "Missing parenthesis",
+    [8] = "Syntax error in condition",
+    [9] = "Missing token ASSIGN"
 };
 
 void nextToken(){
@@ -20,6 +24,48 @@ void nextToken(){
 
 void parseError(int err_num){
     fprintf(outfile, syntaxerrors[err_num]);
+}
+
+void factor(){
+    if (token == NUMBER)
+        nextToken();
+    else if (token == IDENT){
+        nextToken();
+        if (token == LBRACK){
+            nextToken();
+            expression();
+            if (token == RBRACK)
+                nextToken();
+            else
+                parserError(6);
+        }
+    }
+    else if (token == LPARENT){
+        nextToken();
+        expression();
+        if (token == RPARENT)
+            nextToken();
+        else
+            parserError(7);
+    }
+}
+
+void term(){
+    factor();
+    while(token == TIMES || token == SLASH || token == PERCENT){
+        nextToken();
+        factor();
+    }
+}
+
+void expression(){
+    if (token == PLUS || token == MINUS)
+        nextToken();
+    term();
+    if (token == PLUS || token == MINUS){
+        nextToken();
+        term();
+    }
 }
 
 void program(){
