@@ -17,7 +17,8 @@ static char *syntaxerrors[] =
     [8] = "Syntax error in condition",
     [9] = "Missing ASSIGN (:=) ",
     [10] = "Missing fuction/procedure name",
-    [11] = "Missing keyword END"
+    [11] = "Missing keyword END",
+    [12] = "Missing keyword THEN"
 };
 
 void nextToken(){
@@ -130,6 +131,22 @@ void statement(){
             nextToken();
         else
             parseError(11);
+    }
+
+    // Branch 4: condition
+    else if (token == IF){
+        nextToken();
+        condition();
+        if (token == THEN){
+            nextToken();
+            statement();
+            if (token == ELSE){
+                nextToken();
+                statement();
+            }
+        }
+        else
+            parseError(12);
     }
 }
 
