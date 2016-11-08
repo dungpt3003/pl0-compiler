@@ -68,8 +68,8 @@ void pushToken(){
 
 // Print lexical analyser error
 void lexerror(char *err, ...){
-  fprintf(outfile,"%s\n", err);
-  is_lex_error = true;
+  fprintf(outfile,"Lexical error: %s\n", err);
+  exit(0);
 }
 
 //Receive one-character token
